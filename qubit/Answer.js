@@ -29,7 +29,8 @@ var $ = function (selector) {
 
     /**
      * @desc Push slice of selector into sel_names
-     * @param {number} i - Index to end slice
+     * @param {number} start - Index to start slice
+     * @param {number} end - Index to end slice
      */
     function pushName(start, end) {
       selectorNames.push(selector.slice(start, end));
@@ -57,8 +58,8 @@ var $ = function (selector) {
        * @desc This function is replaces the need to use
        * document.getElementById, document.getElementsByClassName, and
        * document.getElementsByTagName
-       * @param sel
-       * @returns {*}
+       * @param query
+       * @returns {HTMLElement|NodeList|HTMLCollection}
        */
       search: function(query) {
         if (query[0] == '#') {
@@ -76,12 +77,11 @@ var $ = function (selector) {
 
     var base = DOM.search(selectorNames[0]);
 
-    if (sel_names.length > 1) {
+    if (selectorNames.length > 1) {
       var traverse_index = 1;
       while (traverse_index != selectorNames.length) {
-        var sel = selectorNames[traverse_index];
-        elements.push(DOM.search(sel.slice(1)));
-        if (sel[0] == '#') stop = true;
+        var selectorName = selectorNames[traverse_index];
+        elements.push(DOM.search(selectorName.slice(1)));
         traverse_index++;
       }
     } else {
