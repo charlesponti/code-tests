@@ -1,6 +1,31 @@
 var $ = function (selector) {
   /**
-   * @desc This object holder RegExp matchers
+   * @desc This array will hold the results to be returned.
+   * @type {Array}
+   */
+  var elements = [];
+
+  /**
+   * @desc This array will hold the class names in the selector
+   * @type {Array}
+   */
+  var classSelectors = [];
+
+  /**
+   * @desc This array will hold the id names in the selector
+   * @type {Array}
+   */
+  var idSelectors = [];
+
+  /**
+   * @desc This variable will be assigned to the tag name in the selector
+   * if one exists.
+   * @type {String}
+   */
+  var tagName;
+
+  /**
+   * @desc This object holds Regular Expressions for testing selectors.
    * @type {Object}
    */
   var matcher = {
@@ -37,20 +62,28 @@ var $ = function (selector) {
    * @type {Object}
    */
   var DOM = {
-    /**
-     * @desc This function is replaces the need to use
-     * document.getElementById, document.getElementsByClassName, and
-     * document.getElementsByTagName
-     * @param query
-     * @returns {HTMLElement|NodeList|HTMLCollection}
-     */
     search: {
+      /**
+       * @desc Search DOM by id
+       * @param {String} query
+       * @returns {HTMLElement}
+       */
       id: function(query) {
         return document.getElementById(query);
       },
+      /**
+       * @desc Search DOM by class
+       * @param {String} query
+       * @returns {Array}
+       */
       class: function(query) {
         return makeArray(document.getElementsByClassName(query));
       },
+      /**
+       * @desc Search DOM by tag name
+       * @param {String} query
+       * @returns {Array}
+       */
       tag: function(query) {
         return makeArray(document.getElementsByTagName(query));
       }
@@ -59,14 +92,17 @@ var $ = function (selector) {
 
   /**
    * @desc Index to begin slice. Set to 0 by default.
-   * @type {number}
+   * @type {Number}
    */
   var sliceStart = 0;
-  var selectorLength = selector.length;
 
   /**
-   * @desc Iterate through selector searching for classes and ids
+   * @desc This variable holds the length of the selector.
+   * @type {Number}
    */
+  var selectorLength = selector.length;
+
+  /* Iterate through selector searching for classes and ids */
   for (var i = 1; i < selectorLength; i++) {
     if (matcher.id.test(selector[i]) || matcher.class.test(selector[i])) {
       pushName(sliceStart, i);
@@ -76,10 +112,6 @@ var $ = function (selector) {
       pushName(sliceStart, i + 1);
     }
   }
-
-  var classSelectors = [];
-  var idSelectors = [];
-  var tagName;
 
   while (selectorNames.length > 0) {
     var sel = selectorNames[0];
@@ -95,41 +127,81 @@ var $ = function (selector) {
     selectorNames.splice(0, 1);
   }
 
+  idSelectorsLength = idSelectors.length;
+  classSelectorsLength = classSelectors.length;
+
   /**
    * @desc Return element
    */
   var base;
-  if (idSelectors.length == 1) {
+
+
+  function hasTagName(el) {
+    return (tagName && el.tagName.toLowerCase() == tagName);
+  }
+
+  function hasClass(klass, base) {
+    return (base && base.classList.contains(klass));
+  }
+
+  /**
+   * Return empty elements array because one cannot define more than one id
+   * to a HTMLElement
+   */
+  if (idSelectors.length > 1) {
+    return elements;
+  }
+
+  /**
+   * Return result of document.getElementById in array if only one id in
+   * selector and no classes or tag name.
+   */
+  if (idSelectorsLength == 1 && !classSelectorsLength && !tagName) {
+    elements.push(DOM.search.id(idSelectors[0]));
+    return elements;
+  }
+
+  /**
+   *
+   */
+  if (idSelectorsLength == 1 && !!tagName) {
     base = DOM.search.id(idSelectors[0]);
-  } else if (idSelectors.length > 1) {
-    return [];
+    if (hasTagName(base)) { elements.push(base); }
+    return elements;
   }
 
-  if (base) {
+  if (idSelectorsLength && classSelectorsLength) {
+    /**
+     * Check if base element has any
+     */
+    var hasClasses = classSelectors.map(function(klass) {
+      return hasClass(klass, base);
+    });
 
-    /* If base.tagName does not match tag name in selectorNames return empty array */
-    if (tagName && base.tagName.toLowerCase() != tagName) {
-      return [];
-    }
+    if (!(hasClasses.indexOf(false) > -1)) elements.push(base);
 
-    if (classSelectors.length) {
-      /**
-       * Check if base element has any
-       */
-      var hasClasses = classSelectors.map(function(klass) {
-        return (base && base.classList.contains(klass));
-      });
+    return elements
+  }
 
-      if (hasClasses.indexOf(false) > -1) {
-       return [];
-      } else {
-        return [base];
+  if (classSelectorsLength) {
+
+    base = DOM.search.class(classSelectors[0]);
+
+    for (var i = 0; i < base.length; i++) {
+      var el = base[i];
+
+      /* If base.tagName does not match tag name in selectorNames return empty array */
+      if (!hasTagName(el)) return elements;
+
+      for (var y = 1; i < classSelectors.length; i++) {
+        if (!hasClass(classSelectors[i], el)) base.splice(i, 1);
       }
-    } else {
-      return [base];
     }
+
   }
 
-  return [];
+  if (tagName) elements = DOM.search.tag(tagName);
+
+  return elements;
 };
 
