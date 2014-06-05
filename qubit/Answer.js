@@ -113,6 +113,9 @@ var $ = function (selector) {
     }
   }
 
+  /**
+   * Filter selectorNames checking for ids, classes, and tag names.
+   */
   while (selectorNames.length > 0) {
     var sel = selectorNames[0];
 
@@ -127,21 +130,32 @@ var $ = function (selector) {
     selectorNames.splice(0, 1);
   }
 
+  /**
+   * @desc This number represents the length of the idSelectors array.
+   * @type {Number}
+   */
   idSelectorsLength = idSelectors.length;
+
+  /**
+   * @desc This number represents the length of the classSelectors array.
+   * @type {Number}
+   */
   classSelectorsLength = classSelectors.length;
 
   /**
    * @desc Return element
    */
-  var base;
 
 
   function hasTagName(el) {
     return (tagName && el.tagName.toLowerCase() == tagName);
   }
 
-  function hasClass(klass, base) {
-    return (base && base.classList.contains(klass));
+  function hasClasses(base) {
+    var sels = classSelectors.map(function(sel) {
+      return (base && base.classList.contains(sel));
+    });
+    return !(hasClasses.indexOf(false) > -1);
   }
 
   /**
@@ -162,46 +176,57 @@ var $ = function (selector) {
   }
 
   /**
-   *
+   * If id and tag name in selector, get result of document.getElementById
+   * and check that element has tag name
    */
   if (idSelectorsLength == 1 && !!tagName) {
-    base = DOM.search.id(idSelectors[0]);
-    if (hasTagName(base)) { elements.push(base); }
+    var base = DOM.search.id(idSelectors[0]);
+    if (hasTagName(base)) elements.push(base);
     return elements;
   }
 
+  /**
+   * If id and classes in selector, check result of document.getElementById
+   * has classes.
+   */
   if (idSelectorsLength && classSelectorsLength) {
-    /**
-     * Check if base element has any
-     */
-    var hasClasses = classSelectors.map(function(klass) {
-      return hasClass(klass, base);
-    });
-
-    if (!(hasClasses.indexOf(false) > -1)) elements.push(base);
-
+    var base = DOM.search.id(idSelectors[0]);
+    if (hasClasses(base)) elements.push(base);
     return elements
   }
 
-  if (classSelectorsLength) {
-
-    base = DOM.search.class(classSelectors[0]);
-
-    for (var i = 0; i < base.length; i++) {
-      var el = base[i];
-
-      /* If base.tagName does not match tag name in selectorNames return empty array */
-      if (!hasTagName(el)) return elements;
-
-      for (var y = 1; i < classSelectors.length; i++) {
-        if (!hasClass(classSelectors[i], el)) base.splice(i, 1);
-      }
-    }
-
+  /**
+   * If only one class and no ids, get result of
+   * document.getElementsByClassName and filter them, checking if elements
+   * has tag name if one was defined in selector.
+   */
+  if (classSelectorsLength === 1) {
+    elements = DOM.search.class(classSelectors[0]).filter(function(el) {
+      if (tagName) return hasTagName(el);
+      return true;
+    });
+    return elements;
   }
 
+  /**
+   * If more than one class, get result of document.getElementsByClassName
+   * and check that these elements have the rest of the classes in selector
+   */
+  if (classSelectorsLength > 1) {
+    elements = DOM.search.class(classSelectors[0]).filter(function(el) {
+      if (tagName) return hasClasses(el) && hasTagName(el);
+      return hasClasses(el);
+    });
+    return elements;
+  }
+
+  /**
+   * If no classes or ids in selector query, return result of
+   * document.getElementsByTagName
+   */
   if (tagName) elements = DOM.search.tag(tagName);
 
   return elements;
+
 };
 
