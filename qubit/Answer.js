@@ -5,7 +5,7 @@ var $ = function (selector) {
    */
   var elements = [];
 
-  if (selector[0] == '#') {
+  if (/#/.test(selector[0])) {
     /* If selector is an id, return document.getElementById results */
     elements.push(document.getElementById(selector.slice(1)));
   } else {
@@ -40,7 +40,7 @@ var $ = function (selector) {
      * @desc Iterate through selector searching for classes and ids
      */
     for (var i = 0; i < length; i++) {
-      if (selector[i] == '#' || selector[i] == '.' && i != 0) {
+      if (/#|\./.test(selector[i]) && i != 0) {
         pushName(sliceStart, i);
         sliceStart = i;
       } else if (i == length - 1) {
@@ -63,30 +63,37 @@ var $ = function (selector) {
        */
       search: function(query) {
         if (query[0] == '#') {
-          return document.getElementById(query);
+          return document.getElementById(query.slice(1));
         }
         else if (query[0] == '.') {
-          return document.getElementsByClassName(query);
+          return Array.prototype.slice
+                    .call(document.getElementsByClassName(query.slice(1)));
         }
         else {
-          return  document.getElementsByTagName(query);
+          return Array.prototype.slice
+                    .call(document.getElementsByTagName(query));
         }
       }
     };
 
-
-    var base = DOM.search(selectorNames[0]);
-
     if (selectorNames.length > 1) {
-      var traverse_index = 1;
+      var traverse_index = 0;
       while (traverse_index != selectorNames.length) {
         var selectorName = selectorNames[traverse_index];
-        elements.push(DOM.search(selectorName.slice(1)));
+        elements.push(DOM.search(selectorName));
         traverse_index++;
       }
     } else {
-      elements = base;
+      elements.push(DOM.search(selectorNames[0]));
     }
+
+    var baseSelector = selectorNames[0][0];
+
+    elements.map(function(el, index) {
+      if (/#|\./.test(baseSelector)) {
+        if (el.tagName.toLowerCase() != baseSelector) elements.splice(index, 1);
+      }
+    });
 
   }
 
