@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Memoisation & Dynamic Programming</title>
+</head>
+<body>
+
+  <script id="jsbin-javascript">
+    var count = 0;
+
+    /**
+     * @param {Number} n
+     */
+    function fib(n) {
+      count++
+
+      if (n < 0) {
+        return 0;
+      } else if (n === 1) {
+        return 1;
+      } else {
+        return fib(n - 1) + fib(n - 2)
+      }
+    }
+
+    var countWithMemo = 0;
+    var memo = {};
+
+    /**
+     * @param {Number} n
+     * @param {Number[]} memo
+     */
+    function fibWithMemo(n, memo) {
+      countWithMemo++
+
+      if (n < 0) return 0;
+      
+      if (n === 1) return 1;
+
+      // If already in memo (already calculated), return value
+      if (memo[n] === void 0) {  
+        // Assign to memo
+        memo[n] = fibWithMemo(n - 1, memo) + fibWithMemo(n - 2, memo);
+      } 
+      
+      return memo[n]
+    }
+
+    console.log(fib(10), count + " times")
+    console.log(fibWithMemo(10, memo), countWithMemo + " times called")
+
+    // -----------------
+    // Space Complexity (aka) memory usage
+    // -----------------
+    // There are only O(N) things that can be on call stack
+    // at any one time
+    function validSquare(g, r, c) {
+
+    }
+
+    function isAtEnd(g, r, c) {
+
+    }
+
+    var countPathsCount = 0
+    function countPaths(grid, row, col) {
+      countPathsCount++
+
+      if (!validSquare(grid, row, col)) return 0;
+      
+      if (!isAtEnd(grid, row, col)) return 1;
+
+      return (
+        countPaths(grid, row + 1, col) + 
+        countPaths(grid, row, col + 1)
+      )
+    }
+
+    var countPathsCountWithMemo = 0
+    var paths = {}
+    function countPaths(grid, row, col, paths) {
+      countPathsCountWithMemo++
+
+      if (!validSquare(grid, row, col)) return 0;
+      
+      if (!isAtEnd(grid, row, col)) return 1;
+      
+      if (paths[row][col] === 0) {
+        paths[row][col] = (
+          countPaths(grid, row + 1, col) + 
+          countPaths(grid, row, col + 1)
+        )
+      }
+
+      return paths[row][col]
+    }
+
+    // -------------------
+    // Dynamic Programming
+    // -------------------
+    //
+    </script>
+
+
+
+    <script id="jsbin-source-javascript" type="text/javascript">var count = 0;
+
+    /**
+     * @param {Number} n
+     */
+    function fib(n) {
+      count++
+
+      if (n < 0) {
+        return 0;
+      } else if (n === 1) {
+        return 1;
+      } else {
+        return fib(n - 1) + fib(n - 2)
+      }
+    }
+
+    var countWithMemo = 0;
+    var memo = {};
+
+    /**
+     * @param {Number} n
+     * @param {Number[]} memo
+     */
+    function fibWithMemo(n, memo) {
+      countWithMemo++
+
+      if (n < 0) return 0;
+      
+      if (n === 1) return 1;
+
+      // If already in memo (already calculated), return value
+      if (memo[n] === void 0) {  
+        // Assign to memo
+        memo[n] = fibWithMemo(n - 1, memo) + fibWithMemo(n - 2, memo);
+      } 
+      
+      return memo[n]
+    }
+
+    console.log(fib(10), count + " times")
+    console.log(fibWithMemo(10, memo), countWithMemo + " times called")
+
+    // -----------------
+    // Space Complexity (aka) memory usage
+    // -----------------
+    // There are only O(N) things that can be on call stack
+    // at any one time
+    function validSquare(g, r, c) {
+
+    }
+
+    function isAtEnd(g, r, c) {
+
+    }
+
+    var countPathsCount = 0
+    function countPaths(grid, row, col) {
+      countPathsCount++
+
+      if (!validSquare(grid, row, col)) return 0;
+      
+      if (!isAtEnd(grid, row, col)) return 1;
+
+      return (
+        countPaths(grid, row + 1, col) + 
+        countPaths(grid, row, col + 1)
+      )
+    }
+
+    var countPathsCountWithMemo = 0
+    var paths = {}
+    function countPaths(grid, row, col, paths) {
+      countPathsCountWithMemo++
+
+      if (!validSquare(grid, row, col)) return 0;
+      
+      if (!isAtEnd(grid, row, col)) return 1;
+      
+      if (paths[row][col] === 0) {
+        paths[row][col] = (
+          countPaths(grid, row + 1, col) + 
+          countPaths(grid, row, col + 1)
+        )
+      }
+
+      return paths[row][col]
+    }
+
+    // -------------------
+    // Dynamic Programming
+    // -------------------
+  </script>
+</body>
+  
+</html>
