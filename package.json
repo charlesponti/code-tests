@@ -1,0 +1,25 @@
+{
+  "name": "code-tests",
+  "version": "1.0.0",
+  "description": "A collection of code-tests",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/charlesponti/code-tests.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/charlesponti/code-tests/issues"
+  },
+  "homepage": "https://github.com/charlesponti/code-tests#readme",
+  "devDependencies": {
+    "eslint": "^4.3.0"
+  },
+  "dependencies": {
+    "eslint-config-standard": "^10.2.1"
+  }
+}
