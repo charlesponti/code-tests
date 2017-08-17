@@ -14,30 +14,29 @@
  * * If no argument is supplied, return the return function
  * @param {String} input 
  */
+/*
+ * Complete the function below.
+ */
 function f (input) {
-  var state = ''
+  var state = 'f'
 
   function q (input) {
-    // Add "o" for every call
-    state += 'o'
-
     /**
-     * If an input is supplied, return the 
-     * current state plus input
-     */
+       * If an input is supplied, return the 
+       * current state plus input
+       */
     if (input) {
       // Add input to current state
       state += input
       return state
+    } else {
+      /**
+         * If no input, increment state and return q
+         */
+      state += 'o'
+      return q
     }
-
-    /**
-     * If no input return q
-     */
-    else return q
   }
 
-  return q
+  return q(input)
 }
-
-console.log(f()()()()()()('b'))
