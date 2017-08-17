@@ -1,4 +1,3 @@
-'use strict'
 
 module.exports = [
   {
@@ -6,7 +5,7 @@ module.exports = [
     path: '/css/{param*}',
     handler: {
       directory: {
-        path: 'src/assets/css',
+        path: 'src/assets',
         listing: true
       }
     }
@@ -16,7 +15,7 @@ module.exports = [
     path: '/js/{param*}',
     handler: {
       directory: {
-        path: 'src/assets/js',
+        path: 'src/assets',
         listing: true
       }
     }

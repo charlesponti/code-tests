@@ -1,12 +1,17 @@
 const env = process.env.NODE_ENV
 const path = require('path')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const cssLoaders = [
+  // { loader: 'style-loader', options: { sourceMap: true } },
+  { loader: 'css-loader', options: { importLoaders: 1, sourceMap: true } },
+  { loader: 'postcss-loader', options: { sourceMap: true } }
+]
 
 module.exports = {
   entry: './src/views/index.js',
   devtool: 'eval',
   output: {
-    path: path.resolve(__dirname, './src/assets/js'),
+    path: path.resolve(__dirname, './src/assets'),
     filename: 'bundle.js'
   },
   module: {
@@ -19,15 +24,14 @@ module.exports = {
       {
         test: /\.css?$/,
         exclude: /node_modules/,
-        use: [ 'style-loader', 'css-loader', 'postcss-loader' ]
-        // (
-        //   env === 'production'
-        //     ? ExtractTextPlugin.extract({
-        //       fallback: 'style-loader',
-        //       use: [ 'style-loader', 'css-loader', 'postcss-loader' ]
-        //     })
-        //     : 
-        // )
+        use: (
+          env === 'production'
+            ? ExtractTextPlugin.extract({
+              fallback: 'style-loader',
+              use: cssLoaders
+            })
+            : cssLoaders
+        )
       }
     ]
   },
