@@ -1,21 +1,48 @@
 const server = require('../../index')
 const expect = require('chai').expect
 const books = require('../data/books.json')
-const GreatExpectations = (
-  Object
-    .keys(books)
-    .map(b => Object.assign({ uid: b }, books[b]))
-    .find(b => b.title === 'Great expectations')
-)
+const axios = require('axios')
+const sinon = require('sinon')
+const GreatExpectations = 'Great expectations'
+
+function turnObjToArr () {
+  return (
+    Object
+      .keys(books)
+      .map(b => Object.assign({ uid: b }, books[b]))
+  )
+}
+
+function getBookTitles (res) {
+  return res.map(function (b) { return b.title })
+}
 
 describe('/books', () => {
-  it('should return books', () => {
-    return server.inject({ method: 'GET', url: '/books' })
-      .then(response => {
-        expect(JSON.parse(response.payload)).to.deep.equal(
-          Object.keys(books).map(b => Object.assign({ uid: b }, books[b]))
-        )
+  let sandbox
+
+  beforeEach(function () {
+    sandbox = sinon.sandbox.create()
+    sandbox.stub(axios, 'get').returns(
+      new Promise(function (resolve) {
+        resolve({ data: books })
       })
+    )
+  })
+
+  afterEach(function () {
+    sandbox.restore()
+  })
+
+  it('should return books', () => {
+    return (
+      server
+        .inject({ method: 'GET', url: '/books' })
+        .then(response => {
+          expect(getBookTitles(JSON.parse(response.payload))).to.deep.equal(
+            getBookTitles(turnObjToArr())
+          )
+        })
+    )
   })
 
   it('should return specific book if uid provided', () => {
@@ -23,7 +50,7 @@ describe('/books', () => {
       server
         .inject({ method: 'GET', url: '/books?search=OL24364628M' })
         .then(response => {
-          expect(JSON.parse(response.payload)).to.deep.equal([GreatExpectations])
+          expect(JSON.parse(response.payload)[0].title).to.equal(GreatExpectations)
         })
     )
   })
@@ -33,7 +60,7 @@ describe('/books', () => {
       server
         .inject({ method: 'GET', url: '/books?search=Great expectations' })
         .then(response => {
-          expect(JSON.parse(response.payload)).to.deep.equal([GreatExpectations])
+          expect(JSON.parse(response.payload)[0].title).to.deep.equal(GreatExpectations)
         })
     )
   })
@@ -44,8 +71,10 @@ describe('/books', () => {
         .inject({ method: 'GET', url: '/books?search=Dicke' })
         .then(response => {
           const books = JSON.parse(response.payload)
+
           expect(books.length).to.deep.equal(2)
-          expect(books.map(b => b.title)).to.deep.equal([
+
+          expect(getBookTitles(books)).to.deep.equal([
             'Great expectations',
             'The adventures of Oliver Twist'
           ])

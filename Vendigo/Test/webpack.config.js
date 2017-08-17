@@ -19,14 +19,15 @@ module.exports = {
       {
         test: /\.css?$/,
         exclude: /node_modules/,
-        use: (
-          env === 'production'
-            ? ExtractTextPlugin.extract({
-              fallback: 'style-loader',
-              use: [ 'style-loader', 'css-loader', 'postcss-loader' ]
-            })
-            : [ 'style-loader', 'css-loader', 'postcss-loader' ]
-        )
+        use: [ 'style-loader', 'css-loader', 'postcss-loader' ]
+        // (
+        //   env === 'production'
+        //     ? ExtractTextPlugin.extract({
+        //       fallback: 'style-loader',
+        //       use: [ 'style-loader', 'css-loader', 'postcss-loader' ]
+        //     })
+        //     : 
+        // )
       }
     ]
   },

@@ -55,6 +55,7 @@
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-react": "^7.1.0",
     "eslint-plugin-standard": "^3.0.1",
+    "extract-text-webpack-plugin": "^3.0.0",
     "ignore-styles": "^5.0.1",
     "jsdom": "^11.1.0",
     "mocha": "^3.2.0",
@@ -68,7 +69,7 @@
     "postcss-url": "^7.1.1",
     "react-addons-test-utils": "^15.6.0",
     "react-hot-loader": "^1.3.1",
-    "sinon": "^3.1.0",
+    "sinon": "^3.2.0",
     "snazzy": "^6.0.0",
     "standard": "^8.6.0",
     "style-loader": "^0.18.2",
@@ -108,6 +109,6 @@
     "dev:server": "nodemon .",
     "dev:client": "NODE_ENV=development node_modules/.bin/webpack --colors --watch",
     "dev": "concurrently \"npm run dev:client\" \"npm run dev:server\"",
-    "test": "NODE_ENV=test mocha src/test.helpers.js src/**/**.test.js -w"
+    "test": "NODE_ENV=test mocha src/**/**.test.js -w"
   }
 }
