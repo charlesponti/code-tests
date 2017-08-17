@@ -1,25 +1,25 @@
-// require('babel-register')()
-// require('ignore-styles')
+require('babel-register')()
+require('ignore-styles')
 
-// var JSDOM = require('jsdom').JSDOM
+var JSDOM = require('jsdom').JSDOM
 
-// var exposedProperties = ['window', 'navigator', 'document']
+var exposedProperties = ['window', 'navigator', 'document']
 
-// var jsdom = new JSDOM('')
+var jsdom = new JSDOM('')
 
-// global.window = jsdom.window
+global.window = jsdom.window
 
-// global.document = window.document
+global.document = window.document
 
-// Object.keys(document.defaultView).forEach((property) => {
-//   if (typeof global[property] === 'undefined') {
-//     exposedProperties.push(property)
-//     global[property] = document.defaultView[property]
-//   }
-// })
+Object.keys(document.defaultView).forEach((property) => {
+  if (typeof global[property] === 'undefined') {
+    exposedProperties.push(property)
+    global[property] = document.defaultView[property]
+  }
+})
 
-// global.navigator = {
-//   userAgent: 'node.js'
-// }
+global.navigator = {
+  userAgent: 'node.js'
+}
 
-// documentRef = document
+documentRef = document
