@@ -30,6 +30,9 @@
     "extends": [
       "eslint:recommended",
       "standard"
-    ]
+    ],
+    "rules": {
+      "no-console": 0
+    }
   }
 }
