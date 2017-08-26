@@ -8,7 +8,9 @@ const yargs = require('yargs')
  */
 function isPrime (n) {
   /**
-   * 
+   * a * b = b
+   * a => a < sqrt(n) || a > sqrt(n)
+   * b => b < sqrt(n) || b > sqrt(n)
    */
   const sqrt = Math.floor(Math.sqrt(n))
 
