@@ -16,7 +16,7 @@
   "license": "UNLICENSED",
   "dependencies": {
     "body-parser": "^1.17.2",
-    "express": "^4.15.3"
+    "express": "^4.15.5"
   },
   "devDependencies": {
     "eslint": "^4.3.0",
