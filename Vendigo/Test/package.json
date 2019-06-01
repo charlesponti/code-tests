@@ -20,7 +20,7 @@
     "Sid Wood <sid.wood@vendigo.com>"
   ],
   "dependencies": {
-    "axios": "^0.16.2",
+    "axios": "^0.19.0",
     "boom": "^4.2.0",
     "concurrently": "^3.5.0",
     "hapi": "^16.0.1",
