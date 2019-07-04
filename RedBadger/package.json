@@ -4,7 +4,9 @@
   "description": "A boilerplate for a static site",
   "main": "gulpfile.js",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "repository": {
     "type": "git",
@@ -31,10 +33,12 @@
     "gulp-watch": "^0.6.5",
     "jshint-stylish": "~0.1.5",
     "mocha": "^1.19.0",
-    "node-static": "~0.7.3"
+    "node-static": "~0.7.3",
+    "snyk": "^1.189.0"
   },
   "devDependencies": {
     "should": "^3.3.2",
     "sinon": "^1.10.0"
-  }
+  },
+  "snyk": true
 }
