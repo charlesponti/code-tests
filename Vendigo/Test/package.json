@@ -30,7 +30,8 @@
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-router-dom": "^4.1.2",
-    "vision": "^4.1.1"
+    "vision": "^4.1.1",
+    "snyk": "^1.258.2"
   },
   "devDependencies": {
     "babel-core": "^6.25.0",
@@ -112,6 +113,9 @@
     "dev": "concurrently \"npm run dev:client\" \"npm run dev:server\"",
     "test": "concurrently \"npm run test:client\" \"npm run test:server\"",
     "test:server": "NODE_ENV=test mocha src/routes/**.test.js -w",
-    "test:client": "NODE_ENV=test mocha src/test.helpers.js src/views/**.test.js -w"
-  }
+    "test:client": "NODE_ENV=test mocha src/test.helpers.js src/views/**.test.js -w",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
+  },
+  "snyk": true
 }
