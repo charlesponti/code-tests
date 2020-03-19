@@ -30,7 +30,7 @@
     "gulp-util": "~2.2.14",
     "gulp-watch": "^0.6.5",
     "jshint-stylish": "~0.1.5",
-    "mocha": "^1.19.0",
+    "mocha": "^7.1.1",
     "node-static": "~0.7.3"
   },
   "devDependencies": {
