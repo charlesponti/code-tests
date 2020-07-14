@@ -27,26 +27,30 @@ const votes: Votes = [
 ]
 
 /**
- * 
+ * Retrieve either winning candidate, or list of candidates sorted by number of votes
  * @param votes Votes
  * @param timestamp 
+ * @param numOfCandidates Number of candidates to return
  */
 function findWinningCandidate(votes: Votes, timestamp: number, numOfCandidates?: number) {
   // { 'CANDIDATE_NAME' : VOTE_COUNT, ... }
   let winningCount: number = 0
-  let winner: string = ''
+  let candidate: string = ''
   const voteCount: VoteCount = {}
   
   for (let i = 0; i < votes.length; i++) {
     const vote = votes[i]
     
+    // If timestamp is below one supplied, increase vote count for candidate
     if (vote.timestamp < timestamp) {
       voteCount[vote.name] = (voteCount[vote.name] || 0) + 1
     }
 
+    // If the current candidate has more votes than the current winner, set
+    // winner to current candidate
     if (voteCount[vote.name] > winningCount) {
       winningCount = voteCount[vote.name]
-      winner = vote.name
+      candidate = vote.name
     }
   }
 
@@ -62,7 +66,8 @@ function findWinningCandidate(votes: Votes, timestamp: number, numOfCandidates?:
     )
   }
 
-  return { winner, winningCount }
+  return { candidate, votes: winningCount }
 }
 
-console.log(findWinningCandidate(votes, 15, 3))
+console.log('Winner', findWinningCandidate(votes, 15))
+console.log('Leaderboard', findWinningCandidate(votes, 15, 3))
