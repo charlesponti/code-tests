@@ -23,14 +23,14 @@
   },
   "homepage": "https://github.com/theponti/boiler-static",
   "dependencies": {
-    "gulp": "~3.6.0",
+    "gulp": "~4.0.0",
     "gulp-concat": "^2.2.0",
-    "gulp-jshint": "~1.5.5",
+    "gulp-jshint": "~2.0.2",
     "gulp-less": "~1.2.3",
     "gulp-util": "~2.2.14",
-    "gulp-watch": "^0.6.5",
+    "gulp-watch": "^4.0.0",
     "jshint-stylish": "~0.1.5",
-    "mocha": "^1.19.0",
+    "mocha": "^3.0.0",
     "node-static": "~0.7.3"
   },
   "devDependencies": {
